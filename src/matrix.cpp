@@ -39,13 +39,17 @@ void Matrix::randomInitialization( int min, int max) {
         }
 }
 
-void Matrix::scalarMultiply(double escalar){
+Matrix Matrix::scalarMultiply(double escalar){
+
+  Matrix result = Matrix(rows,colums) ;
 
   for (int i = 0; i < rows ; ++i) {
        for (int j = 0; j < colums ; ++j) {
-           elements[i][j] =  elements[i][j] * escalar ;
+            result.setElement(i,j,elements[i][j] * escalar) ;
        }
    }
+
+   return result ;
 
 }
 
@@ -65,20 +69,29 @@ bool Matrix::sameDim(Matrix b){
    return b.getRows() == rows && b.getColums() == colums ;
 }
 
-void Matrix::sum( Matrix b ){
+Matrix Matrix::sum( Matrix b ){
 
     if( ! this->sameDim(b) ){
       throw std::runtime_error("sum(A,B) must have the same dimension");
     }
 
+    Matrix result = Matrix(rows,colums);
+
     for (int i = 0; i < rows ; ++i) {
          for (int j = 0; j < colums ; ++j) {
-             elements[i][j] =  elements[i][j] + b.getElement(i,j) ;
+             result.setElement(i,j,  elements[i][j] + b.getElement(i,j) ) ;
          }
      }
+
+     return result ;
 }
 
 void Matrix::setElement(int row , int col , double new_ ){
+
+     if ( row > rows ){ throw std::runtime_error("Out of index row");}
+
+     if (col > colums){ throw std::runtime_error("Out of index colums"); }
+
      elements[row][col] = new_ ;
 }
 
@@ -94,17 +107,20 @@ Matrix Matrix::copy(){
   return copia ;
 }
 
-void Matrix::mulByTerms(Matrix b){
+Matrix Matrix::mulByTerms(Matrix b){
 
     if( ! this->sameDim(b) ){
       throw std::runtime_error("mulByTerms(A,B) must have the same dimension");
     }
 
+    Matrix result = Matrix(rows,colums);
+
     for (int i = 0; i < rows ; ++i) {
         for (int j = 0; j < colums ; ++j) {
-                 elements[i][j] =  elements[i][j] * b.getElement(i,j) ;
+                 result.setElement(i,j,elements[i][j] * b.getElement(i,j) );
         }
     }
+    return result ;
 
 }
 
@@ -112,18 +128,25 @@ bool Matrix::canMult( Matrix b){
   return colums == b.getRows();
 }
 
-void Matrix::mult(Matrix b) {
+Matrix Matrix::mult(Matrix b) {
 
      if (! this->canMult(b) ) {
           throw std::runtime_error("A*B A columns must be equalto B rows ");
      }
 
-     unsigned int new_rows = b.getColums();
-     unsigned int new_cols = rows ;
+     Matrix new_ = Matrix(rows,b.getColums());
 
-     Matrix new_ = Matrix(new_rows,new_cols);
+     for (int i = 0; i < rows ; ++i) {
+        for (int j = 0; j < b.getColums() ; ++j) {
+            double sum = 0;
+            for (int k = 0; k < colums ; ++k) {
+                sum = sum + elements[i][k] * b.getElement(k,j);
+            }
+            new_.setElement(i,j,sum);
+        }
+    }
 
-
+     return new_;
 }
 
 Matrix Matrix::transpose(){
@@ -143,11 +166,15 @@ Matrix Matrix::transpose(){
 
 }
 
-void Matrix::aplayFuntion( double (*func)(double) ){
+Matrix Matrix::aplayFuntion( double (*func)(double) ){
+
+  Matrix result = Matrix(rows,colums);
 
   for (int i = 0; i < rows ; ++i) {
        for (int j = 0; j < colums ; ++j) {
-           elements[i][j] = func( elements[i][j] )  ;
+           result.setElement(i,j,func( elements[i][j] ) )  ;
        }
    }
+
+   return result ;
 }

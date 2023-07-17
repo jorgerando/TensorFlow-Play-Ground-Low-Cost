@@ -1,5 +1,3 @@
-#ifndef MICLASE_H
-#define MICLASE_H
 #include <iostream>
 #include <vector>
 #include <cstdlib>
@@ -33,20 +31,18 @@ public:
 
     bool sameDim( Matrix b );
 
-    void scalarMultiply(double escalar); // A * esc
+    Matrix scalarMultiply(double escalar); // A * esc
 
-    void sum( Matrix b ); // A + B
+    Matrix sum( Matrix b ); // A + B
 
-    void mulByTerms(Matrix b); // A *? B
+    Matrix mulByTerms(Matrix b); // A *? B
 
     bool canMult( Matrix b); // A * B
 
-    void mult(Matrix b) ; // A * B
+    Matrix mult(Matrix b) ; // A * B
 
     Matrix transpose() ; // A^T
 
-    void aplayFuntion( double (*func)(double) ) ; // f(A)
+    Matrix aplayFuntion( double (*func)(double) ) ; // f(A)
 
 };
-
-#endif

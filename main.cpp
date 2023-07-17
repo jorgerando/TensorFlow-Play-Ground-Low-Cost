@@ -1,41 +1,40 @@
 #include <iostream>
 #include "matrix.hpp"
 
-double plusOne(double x) {
-  return x * x ;
+double Relu(double x) {
+
+  if (x > 0) {
+     return x ;
+  }else{
+     return 0 ;
+  }
+
 }
 
-Matrix A = Matrix(2,7);
-
+Matrix x0 = Matrix(2,1);
+Matrix W1 = Matrix(3,2);
+Matrix W2 = Matrix(2,3);
+Matrix W3 = Matrix(1,2);
 
 int main() {
 
-    std::cout << "Hola Mundo!" << std::endl;
-    A.setElement(0,0,1.0);
-    A.setElement(0,1,3.0);
+    x0.setElement(0,0,1);
+    x0.setElement(1,0,1);
 
-    A.show();
-    std::cout << "Hola Mundo!" << std::endl;
-    Matrix a = A.transpose();
-    A.aplayFuntion(&plusOne) ;
-    A.show();
-    /*
-    A.show();
+    W1.randomInitialization(0,1);
+    W2.randomInitialization(0,1);
+    W3.randomInitialization(0,1);
+
+    x0.show();
     std::cout << "----------------" << std::endl;
-    B.show();
+    Matrix x1 = W1.mult(x0).aplayFuntion(&Relu);
+    x1.show();
+    Matrix x2 = W2.mult(x1).aplayFuntion(&Relu);
     std::cout << "----------------" << std::endl;
-    Matrix C = A.copy();
-    C.show();
-
+    x2.show();
+    Matrix x3 = W3.mult(x2).aplayFuntion(&Relu);
     std::cout << "----------------" << std::endl;
-    C.show();
-    std::cout << "----------------" << std::endl;
-
-    A.show();
-    */
-
-    //std::cout << A.sum(B) << std::endl;
-
+    x3.show();
 
     return 0;
 }
