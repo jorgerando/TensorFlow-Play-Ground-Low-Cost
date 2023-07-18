@@ -1,15 +1,6 @@
 #include <iostream>
 #include "matrix.hpp"
-
-double Relu(double x) {
-
-  if (x > 0) {
-     return x ;
-  }else{
-     return 0 ;
-  }
-
-}
+#include "funtions.hpp"
 
 Matrix x0 = Matrix(2,1);
 Matrix W1 = Matrix(3,2);
@@ -27,12 +18,12 @@ int main() {
 
     x0.show();
     std::cout << "----------------" << std::endl;
-    Matrix x1 = W1.mult(x0).aplayFuntion(&Relu);
+    Matrix x1 = W1.mult(x0).aplayFuntion(functions["relu"]);
     x1.show();
-    Matrix x2 = W2.mult(x1).aplayFuntion(&Relu);
+    Matrix x2 = W2.mult(x1).aplayFuntion(functions["relu"]);
     std::cout << "----------------" << std::endl;
     x2.show();
-    Matrix x3 = W3.mult(x2).aplayFuntion(&Relu);
+    Matrix x3 = W3.mult(x2).aplayFuntion(functions["relu"]);
     std::cout << "----------------" << std::endl;
     x3.show();
 
