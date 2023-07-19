@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <script>
+  let wasmModule;
+let currentStep = 0;
+
+async function loadWasmModule() {
+  const wasmFile = 'output.wasm';
+
+  try {
+    const response = await fetch(wasmFile);
+    const bytes = await response.arrayBuffer();
+    const results = await WebAssembly.instantiate(bytes, {});
+    wasmModule = results.instance;
+  } catch (error) {
+    console.error('Error al cargar el módulo de WebAssembly:', error);
+  }
+}
+
+function setup() {
+  createCanvas(400, 400);
+  loadWasmModule();
+}
+
+function draw() {
+  background(220);
+  const result = wasmModule.exports.add(5,4);
+  console.log(result)
+  const result2 = wasmModule.exports.subtract(5,4);
+  console.log(result2)
+
+}
+  </script>
+</head>
+<body>
+
+</body>
+</html>
