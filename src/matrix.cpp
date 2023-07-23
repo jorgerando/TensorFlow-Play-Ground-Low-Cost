@@ -16,21 +16,20 @@ Matrix::Matrix( unsigned int rows_ , unsigned int colums_) {
 
     elements.resize(rows, std::vector<double>(colums));
 
-    std::srand(static_cast<unsigned int>(std::time(nullptr))); // random seed
 }
 
 void Matrix::show(){
 
   for (const auto& fila : elements ) {
         for (double elemento : fila) {
-            std::cout << std::setprecision(4) << elemento << " ";
+            std::cout << /*std::setprecision(4) << */ elemento << " ";
         }
         std::cout << std::endl;
     }
 }
 
 void Matrix::randomInitialization( int min, int max) {
-
+       std::srand(static_cast<unsigned int>(std::time(nullptr))); // random seed
         for (int i = 0; i < rows ; ++i) {
              for (int j = 0; j < colums ; ++j) {
                double r = static_cast<double>(std::rand()) / RAND_MAX;
@@ -80,6 +79,23 @@ Matrix Matrix::sum( Matrix b ){
     for (int i = 0; i < rows ; ++i) {
          for (int j = 0; j < colums ; ++j) {
              result.setElement(i,j,  elements[i][j] + b.getElement(i,j) ) ;
+         }
+     }
+
+     return result ;
+}
+
+Matrix Matrix::sub( Matrix b ){
+
+    if( ! this->sameDim(b) ){
+      throw std::runtime_error("sum(A,B) must have the same dimension");
+    }
+
+    Matrix result = Matrix(rows,colums);
+
+    for (int i = 0; i < rows ; ++i) {
+         for (int j = 0; j < colums ; ++j) {
+             result.setElement(i,j,elements[i][j] - b.getElement(i,j) ) ;
          }
      }
 

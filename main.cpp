@@ -1,31 +1,96 @@
 #include <iostream>
-#include "matrix.hpp"
-#include "funtions.hpp"
+#include "Network.hpp"
 
-Matrix x0 = Matrix(2,1);
-Matrix W1 = Matrix(3,2);
-Matrix W2 = Matrix(2,3);
-Matrix W3 = Matrix(1,2);
+double f(double x){
+  double m = 2.0 ;
+  double b = 0.5 ;
+  return x*m+b ;
+}
+
+double random_(){
+   double min = -1 ;
+   double max = 1 ;
+   double r = static_cast<double>(std::rand()) / RAND_MAX;
+   return min + r * (max - min);
+}
+
+double escalon(double x){
+   if (x > 0.0 ){
+     return 1.0 ;
+   }else {
+   return -1.0 ;
+   }
+}
 
 int main() {
 
-    x0.setElement(0,0,1);
-    x0.setElement(1,0,1);
+   std::vector<int> dim = {3,4,5,2,1};
+   Network net = Network(dim,"sigmoide");
+   net.builtNet();
+   //net.showNet();
+   Matrix x0 = Matrix(3,1);
+   Matrix target = Matrix(1,1);
 
-    W1.randomInitialization(0,1);
-    W2.randomInitialization(0,1);
-    W3.randomInitialization(0,1);
+   x0.setElement(0,0,2);
+   x0.setElement(1,0,2);
+   x0.setElement(2,0,1);
+   target.setElement(0,0,1);
 
-    x0.show();
-    std::cout << "----------------" << std::endl;
-    Matrix x1 = W1.mult(x0).aplayFuntion(functions["relu"]);
-    x1.show();
-    Matrix x2 = W2.mult(x1).aplayFuntion(functions["relu"]);
-    std::cout << "----------------" << std::endl;
-    x2.show();
-    Matrix x3 = W3.mult(x2).aplayFuntion(functions["relu"]);
-    std::cout << "----------------" << std::endl;
-    x3.show();
+   Matrix pre = net.forward(x0) ;
+   net.showNet();
 
+   std::cout << "-------------"<< std::endl;
+   Matrix err = net.error(pre,target) ;
+   //err.show();
+
+   net.calcGradients(pre,target);
+
+   net.updateWeights(0.5);
+
+   net.showNet();
+
+
+
+  /*
+  Matrix W = Matrix(1,3);
+  Matrix x0 = Matrix(3,1);
+  Matrix eti = Matrix(1,1);
+  W.randomInitialization(-5,5);
+
+  while(true){
+
+      double x = random_();
+      double y = random_();
+
+      if ( f(x) > y ){
+         eti.setElement(0,0,1);
+      }else {
+         eti.setElement(0,0,-1);
+      }
+
+      x0.setElement(0,0,x);
+      x0.setElement(1,0,y);
+      x0.setElement(2,0,1);
+
+      Matrix pre = W.mult(x0).aplayFuntion(&escalon);
+
+      Matrix error = pre.sub(eti) ;
+
+      double alfa = 0.05 ;
+      Matrix gradient = error.mult(x0.transpose());
+      W = W.sub( gradient.scalarMultiply(alfa) ) ;
+
+      double w1 = W.getElement(0,0) ;
+      double w2 = W.getElement(0,1) ;
+      double w3 = W.getElement(0,2) ;
+
+      double m = -(w1/w2);
+      double b_ = -(w3/w2);
+
+      std::cout << "Error :"<< error.getElement(0,0)*error.getElement(0,0) << std::endl;
+      std::cout << "M :"<< m << " B :"<< b_ << std::endl;
+
+}
+*/
     return 0;
 }

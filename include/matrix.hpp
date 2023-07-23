@@ -35,6 +35,8 @@ public:
 
     Matrix sum( Matrix b ); // A + B
 
+    Matrix sub( Matrix b); // A - B 
+
     Matrix mulByTerms(Matrix b); // A *? B
 
     bool canMult( Matrix b); // A * B

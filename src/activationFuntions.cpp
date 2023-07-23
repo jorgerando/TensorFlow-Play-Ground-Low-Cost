@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <string>
 #include <unordered_map>
 
 typedef double (*FuncionPtr)(double);
